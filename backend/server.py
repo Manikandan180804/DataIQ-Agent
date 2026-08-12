@@ -31,7 +31,9 @@ from pathlib import Path
 # ── Load .env FIRST before anything reads os.environ ─────────────────────
 try:
     from dotenv import load_dotenv
-    _env_path = Path(__file__).parent / ".env"
+    _env_path = Path(__file__).parent.parent / ".env"
+    if not _env_path.exists():
+        _env_path = Path(__file__).parent / ".env"
     if _env_path.exists():
         load_dotenv(dotenv_path=_env_path, override=False)  # env vars take priority
         print(f"[DataIQ] Loaded .env from {_env_path}")
@@ -46,7 +48,13 @@ sys.path.insert(0, str(Path(__file__).parent))
 from dataiq.agent import DataIQAgent
 from dataiq.db import get_db
 
-app = Flask(__name__, static_folder=".", static_url_path="")
+frontend_dir = Path(__file__).parent.parent / "frontend"
+if not frontend_dir.exists():
+    frontend_dir = Path(__file__).parent / "frontend"
+if not frontend_dir.exists():
+    frontend_dir = Path(__file__).parent
+
+app = Flask(__name__, static_folder=str(frontend_dir), static_url_path="")
 CORS(app, expose_headers=["X-LLM-Name"])
 
 # ── SQLite DB ─────────────────────────────────────────────────────────────
@@ -195,7 +203,7 @@ def _schema_payload(schema: dict) -> dict:
 
 @app.route("/")
 def index():
-    return send_from_directory(".", "index.html")
+    return send_from_directory(app.static_folder, "index.html")
 
 
 @app.route("/api/health", methods=["GET"])

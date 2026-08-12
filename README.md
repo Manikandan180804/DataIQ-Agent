@@ -74,12 +74,12 @@ flowchart TD
 
 | Feature | Description | File Location |
 |---|---|---|
-| 🎨 **Glassmorphism Web Interface** | Modern responsive dark/light mode UI with live schema viewer and instant dataset switching | [`index.html`](index.html), [`style.css`](style.css), [`app.js`](app.js) |
-| 📊 **Matplotlib Chart Generation** | Embedded high-resolution PNG charts for bar, line, pie, histogram, and scatter plot requests | [`dataiq/executor.py`](dataiq/executor.py), [`dataiq/agent.py`](dataiq/agent.py) |
-| 📓 **Jupyter Notebook Exporter** | Export full Q&A sessions into fully annotated `.ipynb` files for data science workflows | [`server.py`](server.py), [`dataiq/formatter.py`](dataiq/formatter.py) |
-| 💾 **SQLite Audit & History** | Persistent storage of dataset schemas, query threads, and execution diagnostics | [`dataiq/db.py`](dataiq/db.py) |
-| 📁 **10 Pre-loaded Sample Datasets** | Instant testing across Sales, HR Payroll, E-Commerce, Healthcare, Real Estate & Finance | [`sample_datasets/`](sample_datasets/) |
-| 🖥️ **Interactive CLI Tool** | Terminal REPL with table formatting, color output, and non-interactive query flags | [`cli.py`](cli.py) |
+| 🎨 **Glassmorphism Web Interface** | Modern responsive dark/light mode UI with live schema viewer and instant dataset switching | [`frontend/index.html`](frontend/index.html), [`frontend/style.css`](frontend/style.css), [`frontend/app.js`](frontend/app.js) |
+| 📊 **Matplotlib Chart Generation** | Embedded high-resolution PNG charts for bar, line, pie, histogram, and scatter plot requests | [`backend/dataiq/executor.py`](backend/dataiq/executor.py), [`backend/dataiq/agent.py`](backend/dataiq/agent.py) |
+| 📓 **Jupyter Notebook Exporter** | Export full Q&A sessions into fully annotated `.ipynb` files for data science workflows | [`backend/server.py`](backend/server.py), [`backend/dataiq/formatter.py`](backend/dataiq/formatter.py) |
+| 💾 **SQLite Audit & History** | Persistent storage of dataset schemas, query threads, and execution diagnostics | [`backend/dataiq/db.py`](backend/dataiq/db.py) |
+| 📁 **10 Pre-loaded Sample Datasets** | Instant testing across Sales, HR Payroll, E-Commerce, Healthcare, Real Estate & Finance | [`backend/sample_datasets/`](backend/sample_datasets/) |
+| 🖥️ **Interactive CLI Tool** | Terminal REPL with table formatting, color output, and non-interactive query flags | [`backend/cli.py`](backend/cli.py) |
 
 ---
 
@@ -90,11 +90,11 @@ flowchart TD
 Ensure Python **3.10+** is installed:
 
 ```powershell
-# Clone or navigate to the project directory
+# Navigate to the project directory
 cd "d:\QandA - CSV Agent"
 
 # Install required Python dependencies
-pip install -r requirements.txt
+pip install -r backend/requirements.txt
 ```
 
 ### 2. Configure API Key (Optional)
@@ -111,7 +111,7 @@ OPENAI_MODEL=gpt-4o
 ### 3. Launch Web Application
 
 ```powershell
-python server.py
+python backend/server.py
 ```
 
 Open **`http://127.0.0.1:5000`** in your browser to interact with the visual interface!
@@ -120,10 +120,10 @@ Open **`http://127.0.0.1:5000`** in your browser to interact with the visual int
 
 ```powershell
 # Interactive REPL mode
-python cli.py --file sample_data.csv
+python backend/cli.py --file backend/sample_data.csv
 
 # Single query execution mode
-python cli.py --file sample_data.csv --ask "What is the total revenue by category?"
+python backend/cli.py --file backend/sample_data.csv --ask "What is the total revenue by category?"
 ```
 
 ---
@@ -148,26 +148,30 @@ python cli.py --file sample_data.csv --ask "What is the total revenue by categor
 
 ```
 QandA - CSV Agent/
-├── server.py                  # Flask REST API Server
-├── cli.py                     # Terminal REPL & CLI Interface
-├── test_app_health.py         # End-to-End System Test Suite
-├── test_api.py                # Router & Unit Test Suite
-├── index.html                 # Glassmorphism Frontend Markup
-├── style.css                  # UI Design System & Themes
-├── app.js                     # Client-side State & API Integration
-├── sample_data.csv            # Standard Sales Performance Dataset
-├── sample_datasets/           # 10 Multi-Domain Test Datasets
+├── frontend/                  # Frontend UI Web Assets
+│   ├── index.html             # Glassmorphism Frontend Markup
+│   ├── style.css              # Custom UI Design System & Themes
+│   └── app.js                 # Frontend Application Logic & API Calls
+├── backend/                   # Backend Application & Agent Core
+│   ├── server.py              # Flask REST API Server
+│   ├── cli.py                 # Terminal REPL & CLI Interface
+│   ├── requirements.txt       # Python Dependency Manifest
+│   ├── test_app_health.py     # End-to-End System Test Suite
+│   ├── test_api.py            # Router & Unit Test Suite
+│   ├── sample_data.csv        # Standard Sales Performance Dataset
+│   ├── sample_datasets/       # 10 Multi-Domain Test Datasets
+│   └── dataiq/                # Core Agent Framework
+│       ├── __init__.py
+│       ├── agent.py           # Orchestrator & Code Generation Pipeline
+│       ├── router.py          # Sub-5ms Query Classification Router
+│       ├── executor.py        # Sandboxed Python Execution Engine
+│       ├── loader.py          # CSV/Excel Schema Ingestion & Parser
+│       ├── formatter.py       # Markdown & Visualization Formatter
+│       └── db.py              # SQLite Persistence & Audit Logging
 ├── system_prompt.md           # LLM Agent Role & Guardrails Prompt
 ├── DEMO_TRANSCRIPT.md         # 10 Benchmark Question Transcripts
-├── dataiq/                    # Core Agent Library
-│   ├── __init__.py
-│   ├── agent.py               # Orchestrator & Code Generation Pipeline
-│   ├── router.py              # Sub-5ms Query Classification Router
-│   ├── executor.py            # Sandboxed Python Execution Engine
-│   ├── loader.py              # CSV/Excel Schema Ingestion & Parser
-│   ├── formatter.py           # Markdown & Visualization Formatter
-│   └── db.py                  # SQLite Persistence & Audit Logging
-└── requirements.txt           # Python Dependency Manifest
+├── README.md                  # Project Documentation
+└── .env                       # Environment Configurations
 ```
 
 ---
@@ -177,7 +181,7 @@ QandA - CSV Agent/
 Run the comprehensive test suite validating API health, load functions, complex code-gen, Matplotlib chart rendering, and Jupyter notebook exports:
 
 ```powershell
-python test_app_health.py
+python backend/test_app_health.py
 ```
 
 **Test Output:**
