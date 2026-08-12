@@ -1,0 +1,21 @@
+Order_No,Customer_Country,Payment_Method,Items_Count,Subtotal_USD,Shipping_Fee,Fulfillment
+EC-8000,Japan,Apple Pay,4,407.97,0.0,Delivered
+EC-8001,USA,Crypto,3,521.21,14.99,Delivered
+EC-8002,Germany,Credit Card,3,153.5,9.99,Delivered
+EC-8003,UK,Credit Card,6,309.52,14.99,Processing
+EC-8004,USA,Crypto,7,351.75,4.99,Delivered
+EC-8005,Germany,Credit Card,6,465.75,0.0,In Transit
+EC-8006,Japan,Crypto,6,45.28,4.99,Delivered
+EC-8007,Germany,Credit Card,6,596.83,9.99,Delivered
+EC-8008,Japan,PayPal,6,292.56,4.99,Delivered
+EC-8009,UK,Credit Card,6,182.13,4.99,Delivered
+EC-8010,Japan,Crypto,5,532.42,9.99,In Transit
+EC-8011,USA,Crypto,3,453.67,14.99,Delivered
+EC-8012,UK,Crypto,6,572.77,4.99,Delivered
+EC-8013,USA,Crypto,3,211.83,14.99,In Transit
+EC-8014,Australia,Crypto,3,340.59,4.99,Delivered
+EC-8015,Canada,Apple Pay,2,351.92,14.99,Delivered
+EC-8016,Japan,Apple Pay,5,588.58,9.99,Delivered
+EC-8017,Canada,Credit Card,6,63.69,4.99,Delivered
+EC-8018,Canada,Crypto,1,197.29,9.99,Processing
+EC-8019,Japan,Credit Card,4,130.72,4.99,Delivered

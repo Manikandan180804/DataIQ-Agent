@@ -1,0 +1,75 @@
+{
+  "session_id": "real_run_demo_1786469973",
+  "results": [
+    {
+      "id": 1,
+      "query": "How many total orders are in the dataset?",
+      "answer_markdown": "### [Answer]\nHere are the results for your query (20 rows returned):\n\n---\n### [Code]\n```python\nresult = df.groupby('order_date')['order_id'].sum().reset_index().sort_values(by='order_id', ascending=False)\n```\n\n---\n### [Data View]\n| order_date   |   order_id |\n|:-------------|-----------:|\n| 2024-08-02   |       1020 |\n| 2024-07-19   |       1019 |\n| 2024-07-08   |       1018 |\n| 2024-06-25   |       1017 |\n| 2024-06-14   |       1016 |\n| 2024-06-01   |       1015 |\n| 2024-05-20   |       1014 |\n| 2024-05-05   |       1013 |\n| 2024-04-28   |       1012 |\n| 2024-04-15   |       1011 |\n| 2024-04-02   |       1010 |\n| 2024-03-19   |       1009 |\n| 2024-03-10   |       1008 |\n| 2024-03-01   |       1007 |\n| 2024-02-22   |       1006 |\n| 2024-02-14   |       1005 |\n| 2024-02-03   |       1004 |\n| 2024-01-18   |       1003 |\n| 2024-01-12   |       1002 |\n| 2024-01-05   |       1001 |\n\n---\n### [Methodology]\nGrouped by 'order_date' and summed 'order_id' (descending order).\n",
+      "query_type": "simple",
+      "duration_ms": 4257
+    },
+    {
+      "id": 2,
+      "query": "What is the total revenue generated across all sales?",
+      "answer_markdown": "### [Answer]\nThe total sum of `revenue` is **14,403.28**.\n\n---\n### [Code]\n```python\nresult = df['revenue'].sum()\n```\n\n---\n### [Data View]\n**14,403.28**\n\n---\n### [Methodology]\nSum of column 'revenue'; NaN values skipped (pandas default).\n",
+      "query_type": "simple",
+      "duration_ms": 1
+    },
+    {
+      "id": 3,
+      "query": "Which product category generated the highest total revenue?",
+      "answer_markdown": "### [Answer]\nHere are the results for your query (3 rows returned):\n\n---\n### [Code]\n```python\nresult = df.groupby('category')['revenue'].sum().reset_index().sort_values(by='revenue', ascending=False)\n```\n\n---\n### [Data View]\n| category      |   revenue |\n|:--------------|----------:|\n| Electronics   |   9743.55 |\n| Clothing      |   3149.92 |\n| Home & Garden |   1509.81 |\n\n---\n### [Methodology]\nGrouped by 'category' and summed 'revenue' (descending order).\n",
+      "query_type": "simple",
+      "duration_ms": 3108
+    },
+    {
+      "id": 4,
+      "query": "What is the average unit price of products sold?",
+      "answer_markdown": "### [Answer]\nThe average (mean) of `product` is **285.60**.\n\n---\n### [Code]\n```python\nresult = df['unit_price'].mean()\n```\n\n---\n### [Data View]\n**285.60**\n\n---\n### [Methodology]\nArithmetic mean of column 'unit_price'; NaN values excluded.\n",
+      "query_type": "simple",
+      "duration_ms": 1
+    },
+    {
+      "id": 5,
+      "query": "List the top 5 highest revenue orders.",
+      "answer_markdown": "### [Answer]\nHere are the top **5** rows by `order_id`:\n\n---\n### [Code]\n```python\nresult = df.nlargest(5, 'order_id')\n```\n\n---\n### [Data View]\n|   order_id | order_date   | customer    | category      | product        |   quantity |   unit_price |   revenue | region   | status    |\n|-----------:|:-------------|:------------|:--------------|:---------------|-----------:|-------------:|----------:|:---------|:----------|\n|       1020 | 2024-08-02   | Zeta Corp   | Clothing      | Dress Shirt    |         10 |        45    |    450    | North    | Completed |\n|       1019 | 2024-07-19   | Epsilon LLC | Electronics   | Monitor 27\"    |          3 |       399    |   1197    | East     | Completed |\n|       1018 | 2024-07-08   | Beta Ltd    | Home & Garden | Blender        |          7 |        59.99 |    419.93 | South    | Completed |\n|       1017 | 2024-06-25   | Delta Co    | Electronics   | Wireless Mouse |         15 |        29.99 |    449.85 | West     | Completed |\n|       1016 | 2024-06-14   | Alice Corp  | Clothing      | Running Shoes  |          4 |       120    |    480    | North    | Completed |\n\n---\n### [Methodology]\nTop 5 rows by column 'order_id' (descending order).\n",
+      "query_type": "simple",
+      "duration_ms": 9
+    },
+    {
+      "id": 6,
+      "query": "How many unique customers made purchases?",
+      "answer_markdown": "### [Answer]\nThere are **6** unique values in `customer`.\n\n---\n### [Code]\n```python\nresult = df['customer'].nunique()\n```\n\n---\n### [Data View]\n**6**\n\n---\n### [Methodology]\nCount of distinct non-null values in column 'customer'.\n",
+      "query_type": "simple",
+      "duration_ms": 0
+    },
+    {
+      "id": 7,
+      "query": "What is the total revenue for the North region?",
+      "answer_markdown": "### [Answer]\nThe computed result is **7,109.77**.\n\n---\n### [Code]\n```python\nresult = df[df['region'] == 'North']['revenue'].sum()\n```\n\n---\n### [Data View]\n**7,109.77**\n\n---\n### [Methodology]\nFiltered dataframe where region == 'North', summed 'revenue'.\n",
+      "query_type": "simple",
+      "duration_ms": 2776
+    },
+    {
+      "id": 8,
+      "query": "Which product has the highest total quantity sold?",
+      "answer_markdown": "### [Answer]\nHere are the results for your query (9 rows returned):\n\n---\n### [Code]\n```python\nresult = df.groupby('product')['quantity'].sum().reset_index().sort_values(by='quantity', ascending=False)\n```\n\n---\n### [Data View]\n| product        |   quantity |\n|:---------------|-----------:|\n| Wireless Mouse |         45 |\n| Dress Shirt    |         22 |\n| Running Shoes  |         12 |\n| Blender        |         11 |\n| Coffee Maker   |          8 |\n| Winter Jacket  |          8 |\n| Garden Hose    |          6 |\n| Monitor 27\"    |          6 |\n| Laptop Pro     |          5 |\n\n---\n### [Methodology]\nGrouped by 'product' and summed 'quantity' (descending order).\n",
+      "query_type": "simple",
+      "duration_ms": 2605
+    },
+    {
+      "id": 9,
+      "query": "How many orders were returned?",
+      "answer_markdown": "### [Answer]\nThe computed result is **2**.\n\n---\n### [Code]\n```python\nresult = len(df[df['status'] == 'Returned'])\n```\n\n---\n### [Data View]\n**2**\n\n---\n### [Methodology]\nFiltered dataframe where status == 'Returned', counted rows.\n",
+      "query_type": "simple",
+      "duration_ms": 3669
+    },
+    {
+      "id": 10,
+      "query": "What will the total sales be next quarter?",
+      "answer_markdown": "### \u2139\ufe0f Out of Scope\n\n**Query:** What will the total sales be next quarter?\n\nThis query requires prediction or external data, which DataIQ does not support.\n\nDataIQ computes answers from loaded data only. If you need forecasting or external data, that requires additional setup.\n\n**What I can do:**\n- Summarize historical trends\n- Compute aggregations (sum, mean, max, min, count)\n- Filter and group data by any column\n- Show correlations between numeric columns\n",
+      "query_type": "out_of_scope",
+      "duration_ms": 0
+    }
+  ]
+}

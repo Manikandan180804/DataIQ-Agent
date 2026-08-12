@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DataIQ — CSV & Excel Q&A Agent</title>
+  <meta name="description" content="DataIQ is a deterministic data analysis assistant that answers questions about CSV and Excel files using pandas computations with full code transparency." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ═══════════════════════════════ SIDEBAR ═══════════════════════════════ -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="logo">
+      <div class="logo-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <span class="logo-text">DataIQ</span>
+      <span class="badge-pill">AI Agent</span>
+    </div>
+    <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M12 5l-7 7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+
+  <!-- File Upload Zone -->
+  <div class="sidebar-section">
+    <h3 class="sidebar-label">Dataset</h3>
+    <div class="upload-zone" id="uploadZone" role="button" tabindex="0" aria-label="Upload CSV or Excel file">
+      <div class="upload-icon">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none"><path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <p class="upload-text">Drop CSV / Excel here</p>
+      <p class="upload-hint">or click to browse</p>
+      <input type="file" id="fileInput" accept=".csv,.tsv,.txt,.xls,.xlsx,.xlsm" hidden />
+    </div>
+
+    <button class="btn-chip" id="openSampleModalBtn" style="width:100%;margin-top:10px;padding:8px 12px;display:flex;align-items:center;justify-content:center;gap:6px;font-size:0.78rem;font-weight:600;background:var(--bg-elevated);border:1px solid var(--border)">
+      📁 Browse 10 Sample Datasets
+    </button>
+
+    <!-- Dataset info card (hidden until file loaded) -->
+    <div class="dataset-card hidden" id="datasetCard">
+      <div class="dataset-icon">📊</div>
+      <div class="dataset-info">
+        <span class="dataset-name" id="datasetName">—</span>
+        <span class="dataset-meta" id="datasetMeta">—</span>
+      </div>
+      <button class="btn-icon" id="clearDataset" title="Remove dataset">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6 18L18 6M6 6l12 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Schema Panel -->
+  <div class="sidebar-section" id="schemaSection" style="display:none">
+    <h3 class="sidebar-label">
+      Schema
+      <button class="btn-chip" id="schemaToggle">Show</button>
+    </h3>
+    <div class="schema-panel hidden" id="schemaPanel">
+      <div id="schemaContent"></div>
+    </div>
+  </div>
+
+  <!-- Suggested Questions -->
+  <div class="sidebar-section" id="suggestionsSection" style="display:none">
+    <h3 class="sidebar-label">Suggested Questions</h3>
+    <div class="suggestions-list" id="suggestionsList"></div>
+  </div>
+
+  <!-- History -->
+  <div class="sidebar-section">
+    <h3 class="sidebar-label">
+      Session History
+      <button class="btn-chip danger" id="clearHistory">Clear</button>
+    </h3>
+    <div class="history-list" id="historyList">
+      <p class="empty-hint">No questions yet.</p>
+    </div>
+  </div>
+
+  <!-- Settings -->
+  <div class="sidebar-section" style="margin-top:auto">
+    <button class="settings-btn" id="openSettingsBtn">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/></svg>
+      Settings &amp; API Key
+      <span class="key-status-dot" id="keyStatusDot"></span>
+    </button>
+  </div>
+</aside>
+
+<!-- ═══════════════════════════════ MAIN ═══════════════════════════════ -->
+<main class="main" id="main">
+
+  <!-- Top bar -->
+  <header class="topbar">
+    <button class="sidebar-toggle-desktop" id="sidebarExpandDesktopBtn" aria-label="Expand sidebar" title="Expand Sidebar" style="display:none">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <button class="sidebar-toggle-mobile" id="sidebarToggleMobile" aria-label="Open sidebar">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <div class="topbar-title">
+      <span id="topbarDatasetName">No dataset loaded</span>
+    </div>
+    <div class="topbar-actions">
+      <button class="btn-theme-toggle" id="themeToggleBtn" aria-label="Toggle theme" title="Switch Light / Dark Theme">
+        <svg class="theme-icon sun-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        <svg class="theme-icon moon-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <span class="theme-text" id="themeText">Dark</span>
+      </button>
+      <button class="btn-chip notebook-btn" id="exportNotebookBtn" style="display:none;margin-right:4px;">📥 Export Notebook</button>
+      <button class="btn-chip" id="openHistoryModalBtn">📜 Full History</button>
+      <div class="status-pill" id="statusPill">
+        <span class="status-dot idle"></span>
+        <span class="status-text" id="statusText">Ready</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Chat / answer area -->
+  <div class="chat-area" id="chatArea">
+    <!-- Welcome screen -->
+    <div class="welcome-screen" id="welcomeScreen">
+      <div class="welcome-glow"></div>
+      <div class="welcome-content">
+        <div class="welcome-logo">
+          <svg width="56" height="56" viewBox="0 0 24 24" fill="none"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18" stroke="url(#lg1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="lg1" x1="3" y1="3" x2="21" y2="21" gradientUnits="userSpaceOnUse"><stop stop-color="#7c3aed"/><stop offset="1" stop-color="#06b6d4"/></linearGradient></defs></svg>
+        </div>
+        <h1 class="welcome-title">DataIQ</h1>
+        <p class="welcome-subtitle">CSV &amp; Excel Q&amp;A Agent</p>
+        <p class="welcome-desc">
+          Load a dataset, ask questions in plain English, and get exact answers backed by reproducible Python code.
+        </p>
+        <div class="welcome-steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-text">Upload a CSV or Excel file from the sidebar</div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-text">Ask any data question in plain English</div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-text">Get answers with code, data views &amp; methodology</div>
+          </div>
+        </div>
+        <div style="margin-bottom:16px;display:flex;flex-wrap:wrap;justify-content:center;gap:10px;align-items:center">
+          <button id="loadSampleBtn" class="send-btn" style="width:auto;padding:10px 22px;border-radius:10px;font-size:.85rem;font-family:var(--sans);gap:8px;display:inline-flex;align-items:center;background:var(--accent-g);color:#ffffff;font-weight:600;box-shadow:var(--shadow-sm)">
+            ⚡ Quick Sample CSV
+          </button>
+        </div>
+        <div class="example-queries">
+          <button class="example-btn" data-q="How many rows are in the dataset?">How many rows are in the dataset?</button>
+          <button class="example-btn" data-q="What is the average value of each numeric column?">Average of each numeric column?</button>
+          <button class="example-btn" data-q="Show me the top 10 rows">Show me the top 10 rows</button>
+          <button class="example-btn" data-q="Describe the dataset with summary statistics">Describe the dataset</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Messages container -->
+    <div class="messages" id="messages"></div>
+  </div>
+
+  <!-- Input area -->
+  <div class="input-area">
+    <div class="input-wrapper">
+      <textarea
+        id="queryInput"
+        class="query-input"
+        placeholder="Ask a question about your data…"
+        rows="1"
+        aria-label="Data question input"
+      ></textarea>
+      <button class="send-btn" id="sendBtn" aria-label="Send question">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+    <p class="input-hint">
+      DataIQ computes answers locally using pandas. No data leaves your browser.
+      <span id="llmBadge" class="llm-badge hidden">🔌 LLM: <span id="llmName">—</span></span>
+    </p>
+  </div>
+
+</main>
+
+<!-- ═══════════════════════════ SETTINGS MODAL ══════════════════════════ -->
+<div class="modal-backdrop hidden" id="settingsModal" role="dialog" aria-modal="true" aria-label="Settings">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h2 class="modal-title">Settings &amp; API Key</h2>
+      <button class="btn-icon" id="closeSettingsBtn" aria-label="Close settings">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 18L18 6M6 6l12 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <!-- Key status banner -->
+      <div class="key-banner" id="keyBanner">
+        <span id="keyBannerIcon">🔑</span>
+        <span id="keyBannerText">No API key configured — complex queries use simple pandas ops only.</span>
+      </div>
+
+      <label class="field-label" for="apiKeyInput">OpenAI API Key</label>
+      <div class="key-input-wrap">
+        <input type="password" id="apiKeyInput" class="key-input"
+          placeholder="sk-..." autocomplete="off" spellcheck="false" />
+        <button class="btn-show-key" id="toggleKeyVisibility" title="Show/hide key">👁</button>
+      </div>
+      <p class="field-hint">Your key is sent only to your local Flask server — never stored in the browser or shared externally.</p>
+
+      <label class="field-label" for="modelSelect">Model</label>
+      <select id="modelSelect" class="model-select">
+        <option value="gpt-4o">gpt-4o &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#11088; Best quality — flagship, mature SDK, fast</option>
+        <option value="gpt-4o-mini" selected>gpt-4o-mini &nbsp;&nbsp;&#9889; Best value — 95% quality, ~20x cheaper</option>
+        <option value="gpt-4-turbo">gpt-4-turbo &nbsp;&nbsp;— older, slower, costs more than gpt-4o</option>
+        <option value="o1-mini">o1-mini &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;— reasoning model, overkill for data queries</option>
+        <option value="gpt-3.5-turbo">gpt-3.5-turbo &nbsp;&#9888; not recommended — unreliable column naming</option>
+      </select>
+      <p class="field-hint model-hint">
+        <strong>gpt-4o</strong> = GPT-4 omni — best accuracy for complex groupby/filter queries.<br/>
+        <strong>gpt-4o-mini</strong> — recommended default for cost-effective everyday use.
+      </p>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-secondary" id="closeSettingsBtn2">Cancel</button>
+      <button class="btn-primary" id="saveSettingsBtn">Save &amp; Connect</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ HISTORY MODAL ══════════════════════════ -->
+<div class="modal-backdrop hidden" id="historyModal" role="dialog" aria-modal="true" aria-label="Database Q&A History">
+  <div class="modal-card" style="max-width:750px;max-height:85vh;display:flex;flex-direction:column">
+    <div class="modal-header">
+      <h2 class="modal-title">📜 SQLite Query History &amp; Audit Log</h2>
+      <button class="btn-icon" id="closeHistoryBtn" aria-label="Close history">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 18L18 6M6 6l12 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="modal-body" style="overflow-y:auto;flex:1">
+      <div style="margin-bottom:12px;display:flex;gap:8px">
+        <input type="text" id="historySearchInput" class="key-input" placeholder="Search past queries or answers..." style="flex:1" />
+        <button class="btn-primary" id="historySearchBtn" style="padding:0 16px">Search</button>
+      </div>
+      <div id="historyModalList" style="display:flex;flex-direction:column;gap:10px">
+        <p style="color:var(--text-muted)">Loading history from SQLite...</p>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" id="closeHistoryBtn2">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ LOADING OVERLAY ═══════════════════ -->
+<div class="loading-overlay hidden" id="loadingOverlay">
+  <div class="loader-card">
+    <div class="loader-spinner"></div>
+    <p class="loader-text" id="loaderText">Processing…</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ SAMPLE DATASETS MODAL ══════════════════════════ -->
+<div class="modal-backdrop hidden" id="sampleDatasetsModal" role="dialog" aria-modal="true" aria-label="Sample Datasets Library">
+  <div class="modal-card" style="max-width:850px;max-height:88vh;display:flex;flex-direction:column">
+    <div class="modal-header">
+      <div>
+        <h2 class="modal-title">📁 Sample Datasets Library</h2>
+        <p style="font-size:0.78rem;color:var(--text-muted);margin-top:2px">Test DataIQ with 10 real-world CSV &amp; Excel datasets across various industries.</p>
+      </div>
+      <button class="btn-icon" id="closeSampleModalBtn" aria-label="Close sample datasets">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 18L18 6M6 6l12 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="modal-body" style="overflow-y:auto;flex:1;padding:16px">
+      <div id="sampleDatasetsGrid" style="display:grid;grid-template-columns:repeat(auto-fill, minmax(360px, 1fr));gap:14px">
+        <!-- Rendered dynamically by app.js -->
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" id="closeSampleModalBtn2">Close</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css"/>
+<script src="app.js"></script>
+
+</body>
+</html>

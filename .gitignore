@@ -1,0 +1,7 @@
+# Git ignore rules for DataIQ
+.env
+uploads/
+__pycache__/
+*.pyc
+*.pyo
+.DS_Store

@@ -1,0 +1,21 @@
+Emp_ID,Full_Name,Department,Job_Title,Salary_USD,Bonus_Pct,Performance_Score,Remote
+EMP-500,Alice Smith,Marketing,Software Engineer,65000,0.05,5,Yes
+EMP-501,Bob Jones,Finance,Software Engineer,180000,0.05,4,No
+EMP-502,Charlie Brown,HR,Software Engineer,65000,0.12,4,Yes
+EMP-503,Diana Prince,Finance,Software Engineer,75000,0.1,5,No
+EMP-504,Evan Wright,Marketing,Marketing Specialist,110000,0.2,5,No
+EMP-505,Fiona Gallagher,Marketing,Software Engineer,110000,0.15,4,No
+EMP-506,George Clark,HR,HR Generalist,180000,0.1,3,Yes
+EMP-507,Hannah Abbott,Sales,Financial Analyst,75000,0.15,5,Yes
+EMP-508,Ian Malcolm,Sales,Software Engineer,92000,0.12,4,No
+EMP-509,Julia Roberts,Finance,Marketing Specialist,65000,0.12,4,Yes
+EMP-510,Kevin Bacon,Engineering,Marketing Specialist,145000,0.05,5,Yes
+EMP-511,Laura Croft,Finance,Software Engineer,65000,0.2,4,Yes
+EMP-512,Michael Scott,HR,Financial Analyst,65000,0.15,5,Yes
+EMP-513,Nina Williams,HR,Software Engineer,92000,0.1,4,Yes
+EMP-514,Oscar Martinez,HR,Marketing Specialist,65000,0.12,4,Yes
+EMP-515,Pam Beesly,HR,Account Exec,75000,0.05,4,No
+EMP-516,Quentin Tarantino,HR,HR Generalist,75000,0.05,4,No
+EMP-517,Rachel Green,Marketing,Marketing Specialist,110000,0.15,3,Yes
+EMP-518,Steve Rogers,Sales,Software Engineer,180000,0.12,5,No
+EMP-519,Tony Stark,HR,HR Generalist,145000,0.2,4,No

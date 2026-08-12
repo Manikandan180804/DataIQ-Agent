@@ -1,0 +1,21 @@
+Customer_ID,Subscription_Plan,Tenure_Months,Monthly_Fee_USD,Support_Tickets,Contract_Type,Churned
+CUST-300,Pro,1,79.0,0,Month-to-Month,No
+CUST-301,Pro,33,79.0,2,Two Year,No
+CUST-302,Enterprise,40,79.0,3,Two Year,No
+CUST-303,Pro,10,299.0,1,Month-to-Month,Yes
+CUST-304,Basic,43,29.0,0,Month-to-Month,No
+CUST-305,Basic,44,299.0,6,Month-to-Month,Yes
+CUST-306,Basic,29,79.0,7,Two Year,No
+CUST-307,Enterprise,13,29.0,6,Month-to-Month,No
+CUST-308,Pro,12,79.0,4,Two Year,No
+CUST-309,Basic,31,29.0,0,One Year,No
+CUST-310,Enterprise,46,299.0,6,Two Year,Yes
+CUST-311,Pro,2,29.0,6,Two Year,Yes
+CUST-312,Enterprise,35,29.0,8,One Year,No
+CUST-313,Basic,23,29.0,2,Two Year,No
+CUST-314,Basic,17,29.0,8,Month-to-Month,Yes
+CUST-315,Basic,26,29.0,0,Month-to-Month,Yes
+CUST-316,Enterprise,8,79.0,0,Two Year,No
+CUST-317,Enterprise,29,29.0,3,Month-to-Month,Yes
+CUST-318,Basic,26,29.0,8,Two Year,No
+CUST-319,Enterprise,10,299.0,5,Month-to-Month,No
